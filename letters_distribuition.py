@@ -15,7 +15,7 @@ class Word:
         
         
 def load_word_list_from_file():    
-    file = open("five_letter_words_pt-br.csv",'r', encoding="utf8")    
+    file = open("classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
     lines = file.readlines()[1:]    
     words = []
     
