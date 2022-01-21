@@ -65,22 +65,23 @@ def filter_words(words, right_position, other_position, discarded):
 
 
 def show_ordered_suggestions(suggestions):
-    print('SUGGESTIONS:')
-    max_num = 30
+    print('SUGGESTIONS ', end='')
+    max_num = 38
     
     if (len(suggestions) > max_num):
-        print('(' + str(max_num) + ' of ' + str(len(suggestions)) + ' possibilities from database)')   
+        print('(' + str(max_num) + ' of ' + str(len(suggestions)) + ' possibilities from database):')   
         suggestions = random.sample(suggestions, max_num)
     else:
         random.shuffle(suggestions)
-        print('(' + str(len(suggestions)) + ' possibilities from database)')        
+        print('(' + str(len(suggestions)) + ' possibilities from database):')        
         
     for i in suggestions:
-        print(i.content)    
+        print(i.content, end=' ')
         
         
         
 def show_notes(right_position, other_position, discarded):
+    print('\nNOTES:')
     print('discarded: ', end='')
     print(list(discarded))
     print(f'keep: {right_position}')
@@ -105,7 +106,7 @@ while not end_game:
     
     show_ordered_suggestions(suggestions)
             
-    word = input('type your attempt: ').lower().strip()
+    word = input('\ntype your attempt: ').lower().strip()
     result = input(f'did "{word}" work? [y|n]: ').lower().strip()    
     
     if result == 'y':
