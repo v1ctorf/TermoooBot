@@ -86,6 +86,7 @@ def show_notes(right_position, other_position, discarded):
     print(f'keep: {right_position}')
     print(f'move: {other_position}\n')    
 
+
     
 words = load_word_list_from_file()
 letters_distro = calculate_letters_distribution(words)
