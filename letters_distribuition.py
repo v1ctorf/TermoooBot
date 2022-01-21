@@ -96,7 +96,6 @@ end_game = False
 right_position = {}
 other_position = {}
 discarded = ''
-guess_num = 1
 
 
 while not end_game:
