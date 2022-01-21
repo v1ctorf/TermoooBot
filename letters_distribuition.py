@@ -7,10 +7,14 @@ class Word:
         if (history == ''):
             self.history = None
         else:
-            self.history = datetime.datetime.strptime(history, '%Y-%m-%d')
+            self.history = datetime.datetime.strptime(history[:10], '%Y-%m-%d')
          
         self.google_results = google_results 
-        self.part_of_speech = part_of_speech
+        
+        if (part_of_speech == '' or part_of_speech == None):
+            self.part_of_speech = None
+        else:            
+            self.part_of_speech = part_of_speech        
         
         
         
@@ -23,7 +27,7 @@ def load_word_list_from_file():
         line = i.split(',')  
         line[1].replace('\n','')
         
-        word = Word(content=line[0], history=line[1].strip(), google_results=None, part_of_speech=line[2])                
+        word = Word(content=line[0], history=line[1].strip(), google_results=None, part_of_speech=line[2].strip())                
         words.append(word)      
         
     return words
@@ -40,7 +44,14 @@ def calculate_letters_distribution(words):
             else:
                 dict_letters[letter] = 1
         
-    return dict_letters        
+    return dict_letters   
+
+
+
+def set_words_scope(words):
+    scope = [w for w in words if w.part_of_speech != None]    
+    scope = [w for w in scope if 'substantivo' in w.part_of_speech]    
+    return scope
 
 
 
@@ -66,8 +77,11 @@ def filter_words(words, right_position, other_position, discarded):
 
 def show_ordered_suggestions(suggestions):
     print('SUGGESTIONS ', end='')
-    max_num = 38
+    max_num = 1
     
+    #for w in suggestions:
+        #print([w.content, w.part_of_speech])
+              
     if (len(suggestions) > max_num):
         print('(' + str(max_num) + ' of ' + str(len(suggestions)) + ' possibilities from database):')   
         suggestions = random.sample(suggestions, max_num)
@@ -90,6 +104,7 @@ def show_notes(right_position, other_position, discarded):
 
     
 words = load_word_list_from_file()
+words = set_words_scope(words)
 letters_distro = calculate_letters_distribution(words)
 
 end_game = False
