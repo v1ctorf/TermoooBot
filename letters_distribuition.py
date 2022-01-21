@@ -65,15 +65,26 @@ def filter_words(words, right_position, other_position, discarded):
 
 
 def show_ordered_suggestions(suggestions):
+    print('SUGGESTIONS:')
     max_num = 30
     
     if (len(suggestions) > max_num):
-        print(str(len(suggestions)) + ' suggestions')   
+        print('(' + str(max_num) + ' of ' + str(len(suggestions)) + ' possibilities from database)')   
         suggestions = random.sample(suggestions, max_num)
-    
+    else:
+        random.shuffle(suggestions)
+        print('(' + str(len(suggestions)) + ' possibilities from database)')        
+        
     for i in suggestions:
         print(i.content)    
         
+        
+        
+def show_notes(right_position, other_position, discarded):
+    print('discarded: ', end='')
+    print(list(discarded))
+    print(f'keep: {right_position}')
+    print(f'move: {other_position}\n')    
 
     
 words = load_word_list_from_file()
@@ -87,10 +98,7 @@ guess_num = 1
 
 
 while not end_game:
-    print('discarded: ', end='')
-    print(list(discarded))
-    print(f'keep: {right_position}')
-    print(f'move: {other_position}')
+    show_notes(right_position, other_position, discarded)
     
     suggestions = filter_words(words, right_position, other_position, discarded)
     
@@ -104,14 +112,12 @@ while not end_game:
         print('congratulations')
         continue
     
-    
-    
     for i, letter in enumerate(word):
         if (letter in right_position):
-            print(f'"{letter}" is at position #{i}')
+            print(f'\n"{letter}" is at position #{i}')
             continue
 
-        print('[R]ight | [O]ther | [D]iscard')                                
+        print('\n[R]ight | [O]ther | [D]iscard')                                
         what_happened = (f'what happened to "{letter}"? ')            
         feedback = input(what_happened).lower().strip()   
         
