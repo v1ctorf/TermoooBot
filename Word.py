@@ -1,7 +1,7 @@
 import datetime
 
 class Word:
-    def __init__(self, content, last_mentioned_on, google_results, part_of_speech):
+    def __init__(self, content, last_mentioned_on, google_results, part_of_speech, meanings):
         self.content = content
         
         if (last_mentioned_on == ''):
@@ -15,3 +15,5 @@ class Word:
             self.part_of_speech = None
         else:            
             self.part_of_speech = part_of_speech   
+            
+        self.meanings = meanings
