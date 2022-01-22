@@ -1,10 +1,14 @@
+import random, requests, csv, sys
+
+sys.path.append("..")
+
 from lxml import html
-from word import Word
-import datetime, random, requests, csv
+from Word import Word
+from datetime import datetime
         
 
 def load_word_list_from_file():    
-    file = open("five_letter_words_pt-br.csv",'r', encoding="utf8")    
+    file = open("classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
     lines = file.readlines()[1:]    
     words = []
     
@@ -57,7 +61,12 @@ def save_file(words, filename):
 
 
 words = load_word_list_from_file()
-save_file(words, 'classified_five_letter_words_pt-br.csv')
+
+time_now = datetime.now()
+file_name = time_now.strftime("%Y-%m-%d_%H%M%S")
+
+
+save_file(words, f'{file_name}_classified_five_letter_words_pt-br.csv')
     
     
     

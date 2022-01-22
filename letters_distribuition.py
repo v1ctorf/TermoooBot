@@ -3,7 +3,6 @@ import datetime, random, sys
 sys.path.append("..")
 
 from Word import Word
-#from others.helpers import get_list_integers
         
         
 def load_word_list_from_file():    
@@ -66,7 +65,7 @@ def filter_words(words, right_position, other_position, discarded):
 
 def show_ordered_suggestions(suggestions):
     print('SUGGESTIONS ', end='')
-    max_num = 1
+    max_num = 38
     
     #for w in suggestions:
         #print([w.content, w.part_of_speech])
