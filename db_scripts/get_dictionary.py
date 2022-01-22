@@ -8,27 +8,34 @@ from datetime import datetime
         
 
 def load_word_list_from_file():    
-    file = open("classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
-    lines = file.readlines()[1:10]    
+    file = open("../classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
+    lines = file.readlines()[1000:1050]    
     words = []
     
     for i in lines:    
         line = i.split(',')  
         line[1].replace('\n','')
         
-        metadata = search_on_dictionary(line[0])
+        print(line[0].upper())
+        metadata = search_on_dictionary(line[0])          
+        print(metadata)
+    
+        word_content = line[0]
+        last_mentioned_on = line[1].strip()
+        google_results = None
         
-        print([line[0], metadata])        
-        
-        if isinstance(metadata, list) and 'class' in metadata[0]:
-            part_of_speech = metadata[0]['class']        
+        if isinstance(metadata, list): 
+            for m in metadata:                  
+                part_of_speech=m['class'].strip()  
+                
+                word = Word(word_content, last_mentioned_on, google_results, part_of_speech)
+                words.append(word)
+                print([word.content, word.part_of_speech])
         else:
-            part_of_speech = ''
+            word = Word(word_content, last_mentioned_on, google_results, '')
+            words.append(word)
+            print([word.content, word.part_of_speech])
         
-        word = Word(content=line[0], last_mentioned_on=line[1].strip(), google_results=None, part_of_speech=part_of_speech.strip())                
-        words.append(word) 
-        
-        print([word.content, word.part_of_speech])
         print('\n')
         
     return words
@@ -62,6 +69,9 @@ def save_file(words, filename):
 
 
 words = load_word_list_from_file()
+
+# for w in words:
+  #  print([w.content, w.part_of_speech, w.last_mentioned_on])
 time_now = datetime.now()
 file_date = time_now.strftime("%Y-%m-%d_%H%M%S")
 file_name = f'{file_date}_classified_five_letter_words_pt-br.csv'
