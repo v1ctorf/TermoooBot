@@ -5,11 +5,12 @@ sys.path.append("..")
 from lxml import html
 from Word import Word
 from datetime import datetime
+from unidecode import unidecode
         
 
 def load_word_list_from_file():    
     file = open("../classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
-    lines = file.readlines()[1000:1050]    
+    lines = file.readlines()[1:100]    
     words = []
     
     for i in lines:    
@@ -27,7 +28,7 @@ def load_word_list_from_file():
         if isinstance(metadata, list): 
             for m in metadata:                  
                 part_of_speech=m['class'].strip()
-                meanings = '|'.join(m['meanings'])
+                meanings = ' | '.join(m['meanings'])
                 
                 word = Word(word_content, last_mentioned_on, google_results, part_of_speech, meanings)
                 words.append(word)
@@ -64,7 +65,19 @@ def save_file(words, filename):
         word_writer.writerow(['word', 'last_mentioned_on', 'part_of_speech', 'meanings'])
 
         for i in words:
-            word_writer.writerow([i.content, i.last_mentioned_on, i.part_of_speech, i.meanings])
+            print([i.content, i.last_mentioned_on, i.part_of_speech, i.meanings])
+            
+            try:
+                part_of_speech = unidecode(i.part_of_speech)    
+            except:
+                part_of_speech = None
+                
+            try:
+                meanings = unidecode(i.meanings)    
+            except:
+                meanings = None                
+            
+            word_writer.writerow([i.content, i.last_mentioned_on, part_of_speech, meanings])
             
     print(f'{filename} was successfully created')            
 

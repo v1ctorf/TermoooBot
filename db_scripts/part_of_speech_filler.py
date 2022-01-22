@@ -9,7 +9,7 @@ from datetime import datetime
 
 def load_word_list_from_file():    
     file = open("../classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
-    lines = file.readlines()[1:10]    
+    lines = file.readlines()[1:]    
     words = []
     
     for i in lines:    
