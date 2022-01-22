@@ -1,13 +1,13 @@
 import datetime
 
 class Word:
-    def __init__(self, content, history, google_results, part_of_speech):
+    def __init__(self, content, last_mentioned_on, google_results, part_of_speech):
         self.content = content
         
-        if (history == ''):
-            self.history = None
+        if (last_mentioned_on == ''):
+            self.last_mentioned_on = None
         else:
-            self.history = datetime.datetime.strptime(history[:10], '%Y-%m-%d')
+            self.last_mentioned_on = datetime.datetime.strptime(last_mentioned_on[:10], '%Y-%m-%d')
          
         self.google_results = google_results 
         

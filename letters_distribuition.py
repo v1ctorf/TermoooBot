@@ -14,7 +14,7 @@ def load_word_list_from_file():
         line = i.split(',')  
         line[1].replace('\n','')
         
-        word = Word(content=line[0], history=line[1].strip(), google_results=None, part_of_speech=line[2].strip())                
+        word = Word(content=line[0], last_mentioned_on=line[1].strip(), google_results=None, part_of_speech=line[2].strip())                
         words.append(word)      
         
     return words
