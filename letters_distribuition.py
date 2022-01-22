@@ -1,21 +1,9 @@
-import datetime, random
+import datetime, random, sys
 
-class Word:
-    def __init__(self, content, history, google_results, part_of_speech):
-        self.content = content
-        
-        if (history == ''):
-            self.history = None
-        else:
-            self.history = datetime.datetime.strptime(history[:10], '%Y-%m-%d')
-         
-        self.google_results = google_results 
-        
-        if (part_of_speech == '' or part_of_speech == None):
-            self.part_of_speech = None
-        else:            
-            self.part_of_speech = part_of_speech        
-        
+sys.path.append("..")
+
+from Word import Word
+#from others.helpers import get_list_integers
         
         
 def load_word_list_from_file():    
@@ -50,7 +38,8 @@ def calculate_letters_distribution(words):
 
 def set_words_scope(words):
     scope = [w for w in words if w.part_of_speech != None]    
-    scope = [w for w in scope if 'substantivo' in w.part_of_speech]    
+    scope = [w for w in scope if 'substantivo' in w.part_of_speech or 'adjetivo' in w.part_of_speech] 
+    # TODO handle words with history
     return scope
 
 
