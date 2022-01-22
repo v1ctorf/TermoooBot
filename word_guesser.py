@@ -11,11 +11,19 @@ def load_word_list_from_file():
     words = []
     
     for i in lines:    
-        line = i.split(',')  
-        line[1].replace('\n','')
+        line = i.split(';')                                  
         
-        word = Word(content=line[0], last_mentioned_on=line[1].strip(), google_results=None, part_of_speech=line[2].strip())                
+        content = line[0].strip()
+        last_mentioned_on =  line[1].replace('\n','').strip()
+        google_results = None        
+        part_of_speech = line[2].strip()
+        meanings = line[3].strip()
+        
+        word = Word(content, last_mentioned_on, google_results, part_of_speech, meanings)                
+        
         words.append(word)      
+        
+    file.close()            
         
     return words
 
@@ -65,7 +73,7 @@ def filter_words(words, right_position, other_position, discarded):
 
 def show_ordered_suggestions(suggestions):
     print('SUGGESTIONS ', end='')
-    max_num = 38
+    max_num = 8
     
     #for w in suggestions:
         #print([w.content, w.part_of_speech])
@@ -78,7 +86,8 @@ def show_ordered_suggestions(suggestions):
         print('(' + str(len(suggestions)) + ' possibilities from database):')        
         
     for i in suggestions:
-        print(i.content, end=' ')
+        print(i.content.upper(), end=': ')
+        print(i.meanings, end='\n\n')
         
         
         

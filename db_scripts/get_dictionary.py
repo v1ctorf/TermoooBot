@@ -10,12 +10,11 @@ from unidecode import unidecode
 
 def load_word_list_from_file():    
     file = open("../classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
-    # lines = file.readlines()[1:100]    
-    lines = file.readlines()[100:]    
-    # lines = file.readlines()[1000:]    
+    lines = file.readlines()[1100:1120]    
     words = []
     
     for i in lines:    
+        print(i)
         line = i.split(',')  
         line[1].replace('\n','')
         
@@ -29,7 +28,7 @@ def load_word_list_from_file():
         
         if isinstance(metadata, list): 
             for m in metadata:                  
-                part_of_speech=m['class'].strip()
+                part_of_speech=m['class'].replace(';','.').strip()
                 meanings = ' | '.join(m['meanings']).replace(';','.')
                 
                 word = Word(word_content, last_mentioned_on, google_results, part_of_speech, meanings)
@@ -62,7 +61,7 @@ def search_on_dictionary(word):
 
 def save_file(words, filename):
     with open(filename, mode='w',  newline='\n') as words_file:
-        word_writer = csv.writer(words_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        word_writer = csv.writer(words_file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
         word_writer.writerow(['word', 'last_mentioned_on', 'part_of_speech', 'meanings'])
 
@@ -86,8 +85,7 @@ def save_file(words, filename):
 
 words = load_word_list_from_file()
 
-# for w in words:
-  #  print([w.content, w.part_of_speech, w.last_mentioned_on])
+
 time_now = datetime.now()
 file_date = time_now.strftime("%Y-%m-%d_%H%M%S")
 file_name = f'{file_date}_classified_five_letter_words_pt-br.csv'
