@@ -10,12 +10,12 @@ from unidecode import unidecode
 
 def load_word_list_from_file():    
     file = open("../classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
-    lines = file.readlines()[1100:1120]    
+    lines = file.readlines()[1:]       
     words = []
     
     for i in lines:    
         print(i)
-        line = i.split(',')  
+        line = i.split(';')  
         line[1].replace('\n','')
         
         print(line[0].upper())
@@ -26,7 +26,8 @@ def load_word_list_from_file():
         last_mentioned_on = line[1].strip()
         google_results = None
         
-        if isinstance(metadata, list): 
+        if isinstance(metadata, list):             
+            
             for m in metadata:                  
                 part_of_speech=m['class'].replace(';','.').strip()
                 meanings = ' | '.join(m['meanings']).replace(';','.')
