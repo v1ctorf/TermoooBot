@@ -11,3 +11,4 @@ Road Map:
 + Use Selenium from Python to play directly on the website, like [here](https://stackoverflow.com/questions/30615157/sending-javascript-command-from-python-shell)
 + Update history (`last_mentioned_on` column on CSV file)
 + Consider words with history
++ Tweet the results
