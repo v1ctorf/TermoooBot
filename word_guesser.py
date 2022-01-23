@@ -79,11 +79,11 @@ def show_ordered_suggestions(suggestions):
         #print([w.content, w.part_of_speech])
               
     if (len(suggestions) > max_num):
-        print('(' + str(max_num) + ' of ' + str(len(suggestions)) + ' possibilities from database):')   
+        print('(' + str(max_num) + ' of ' + str(len(suggestions)) + ' words from database):')   
         suggestions = random.sample(suggestions, max_num)
     else:
         random.shuffle(suggestions)
-        print('(' + str(len(suggestions)) + ' possibilities from database):')        
+        print('(' + str(len(suggestions)) + ' word(s) from database):')        
         
     for i in suggestions:
         print('    ', end='')        
@@ -113,10 +113,8 @@ discarded = ''
 
 
 while not end_game:
-    show_notes(right_position, other_position, discarded)
-    
-    suggestions = filter_words(words, right_position, other_position, discarded)
-    
+    show_notes(right_position, other_position, discarded)    
+    suggestions = filter_words(words, right_position, other_position, discarded)    
     show_ordered_suggestions(suggestions)
             
     word = input('\ntype your attempt: ').lower().strip()
@@ -133,7 +131,7 @@ while not end_game:
             continue
 
         print('\n[R]ight | [O]ther | [D]iscard')                                
-        what_happened = (f'what happened to "{letter}"? ')            
+        what_happened = ('what happened to "' + letter.upper() + '"? ')                
         feedback = input(what_happened).lower().strip()   
         
         if (feedback == 'r'):
