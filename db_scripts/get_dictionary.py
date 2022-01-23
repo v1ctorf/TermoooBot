@@ -62,7 +62,6 @@ def search_on_dictionary(word):
 def save_file(words, filename):
     with open(filename, mode='w',  newline='\n') as words_file:
         word_writer = csv.writer(words_file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-
         word_writer.writerow(['word', 'last_mentioned_on', 'part_of_speech', 'meanings'])
 
         for i in words:
