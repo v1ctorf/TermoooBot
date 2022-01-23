@@ -134,9 +134,9 @@ def show_notes(right_position, other_position, discarded):
     right_guesses = ' '.join(right_guesses)
         
     print('\nNOTES:')
-    print('    discarded letters: ', end='')
-    print(list(discarded.upper()))
     print(f'    keep these letters at: {right_guesses}')
+    print('    discarded letters: ', end='')
+    print(list(discarded.upper()))    
     print(f'    move these letters from: {other_position}\n')   
     
 
