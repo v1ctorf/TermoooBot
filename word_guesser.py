@@ -80,10 +80,8 @@ def merge_different_meanings(filtered_words):
     for u in unique_content:
         words_to_be_merged = [w for w in filtered_words if w.content == u]
         
-        content = u
-        # last_mentioned_on = random.choice([w.last_mentioned_on for w in words_to_be_merged])
-        last_mentioned_on = None
-        # google_results = random.choice([w.google_results for w in words_to_be_merged])
+        content = u        
+        last_mentioned_on = random.choice([w.last_mentioned_on for w in words_to_be_merged])                
         google_results = None
         part_of_speech = ' | '.join([w.part_of_speech for w in words_to_be_merged])
         meanings = ' | '.join([w.meanings for w in words_to_be_merged])
@@ -112,7 +110,14 @@ def show_ordered_suggestions(suggestions):
         print('    ', end='')        
         print(i.content.upper(), end=' ')
         print(f'({i.part_of_speech})', end=': ')
-        print(i.meanings, end='\n\n')
+        print(i.meanings, end=' ')
+        
+        last_mentioned_on = 'not found'
+        
+        if i.last_mentioned_on != None:
+            last_mentioned_on = i.last_mentioned_on.strftime("%Y-%m-%d")
+            
+        print(f'Last mentioned on: {last_mentioned_on}\n')
         
         
         
