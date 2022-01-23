@@ -86,6 +86,7 @@ def show_ordered_suggestions(suggestions):
         print('(' + str(len(suggestions)) + ' possibilities from database):')        
         
     for i in suggestions:
+        print('    ', end='')        
         print(i.content.upper(), end=' ')
         print(f'({i.part_of_speech})', end=': ')
         print(i.meanings, end='\n\n')
@@ -94,10 +95,10 @@ def show_ordered_suggestions(suggestions):
         
 def show_notes(right_position, other_position, discarded):
     print('\nNOTES:')
-    print('discarded: ', end='')
+    print('    discarded letters: ', end='')
     print(list(discarded))
-    print(f'keep: {right_position}')
-    print(f'move: {other_position}\n')    
+    print(f'    keep letter at: {right_position}')
+    print(f'    move letter from: {other_position}\n')    
 
 
     
