@@ -51,7 +51,7 @@ def set_words_scope(words):
 
 
 
-def filter_words(words, right_position, other_position, discarded):
+def filter_words(words, right_position, other_position, discarded):    
     filtered_words = words
     
     for letter, position in right_position.items():
@@ -67,20 +67,19 @@ def filter_words(words, right_position, other_position, discarded):
     if ((len(other_position) + len(right_position)) <= 2):
         filtered_words = [w for w in filtered_words if len(set(w.content)) == 5]    
         
-    filtered_words = merge_different_meanings(filtered_words)        
+    filtered_words = merge_different_meanings(filtered_words)           
 
     return filtered_words 
 
 
-
+# is this redundant?
 def merge_different_meanings(filtered_words):    
     unique_content = set([w.content for w in filtered_words])
     merged_words = []
     
     for u in unique_content:
-        words_to_be_merged = [w for w in filtered_words if w.content == u]
-        
-        content = u        
+        words_to_be_merged = [w for w in filtered_words if w.content == u]        
+            
         last_mentioned_on = random.choice([w.last_mentioned_on for w in words_to_be_merged])                
         google_results = None
         part_of_speech = ' | '.join([w.part_of_speech for w in words_to_be_merged])
@@ -88,8 +87,7 @@ def merge_different_meanings(filtered_words):
         
         word = Word(u, last_mentioned_on, google_results, part_of_speech, meanings)                
         
-        merged_words.append(word) 
-    
+        merged_words.append(word)     
 
     return merged_words       
         
@@ -117,7 +115,7 @@ def show_ordered_suggestions(suggestions):
         if i.last_mentioned_on != None:
             last_mentioned_on = i.last_mentioned_on.strftime("%Y-%m-%d")
             
-        print(f'Last mentioned on: {last_mentioned_on}\n')
+        print(f'[Last mentioned on: {last_mentioned_on}]\n')
         
         
         
@@ -142,7 +140,9 @@ def show_notes(right_position, other_position, discarded):
 
     
 words = load_word_list_from_file()
+
 words = set_words_scope(words)
+
 letters_distro = calculate_letters_distribution(words)
 
 end_game = False
@@ -150,10 +150,9 @@ right_position = {}
 other_position = {}
 discarded = ''
 
-
 while not end_game:
     show_notes(right_position, other_position, discarded)    
-    suggestions = filter_words(words, right_position, other_position, discarded)    
+    suggestions = filter_words(words, right_position, other_position, discarded)      
     show_ordered_suggestions(suggestions)
             
     word = input('\ntype your attempt: ').lower().strip()
