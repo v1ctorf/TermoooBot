@@ -74,9 +74,6 @@ def filter_words(words, right_position, other_position, discarded):
 def show_ordered_suggestions(suggestions):
     print('SUGGESTIONS ', end='')
     max_num = 8
-    
-    #for w in suggestions:
-        #print([w.content, w.part_of_speech])
               
     if (len(suggestions) > max_num):
         print('(' + str(max_num) + ' of ' + str(len(suggestions)) + ' words from database):')   
@@ -94,11 +91,22 @@ def show_ordered_suggestions(suggestions):
         
         
 def show_notes(right_position, other_position, discarded):
+    right_guesses = list('_____')
+    inverse_dict =  {value:key for key, value in right_position.items()}
+    
+    for i in range(5):
+        if i in inverse_dict:
+            right_guesses[i] = inverse_dict[i].upper()
+        else:
+            right_guesses[i] = '_'  
+            
+    right_guesses = ' '.join(right_guesses)
+        
     print('\nNOTES:')
     print('    discarded letters: ', end='')
-    print(list(discarded))
-    print(f'    keep letter at: {right_position}')
-    print(f'    move letter from: {other_position}\n')    
+    print(list(discarded.upper()))
+    print(f'    keep these letters at: {right_guesses}')
+    print(f'    move these letters from: {other_position}\n')    
 
 
     
@@ -127,7 +135,7 @@ while not end_game:
     
     for i, letter in enumerate(word):
         if (letter in right_position):
-            print(f'\n"{letter}" is at position #{i}')
+            print('\n"' + letter.upper() + f'" is at position #{i}')
             continue
 
         print('\n[R]ight | [O]ther | [D]iscard')                                
