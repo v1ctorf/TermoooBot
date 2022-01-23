@@ -66,36 +66,14 @@ def filter_words(words, right_position, other_position, discarded):
     
     if ((len(other_position) + len(right_position)) <= 2):
         filtered_words = [w for w in filtered_words if len(set(w.content)) == 5]    
-        
-    filtered_words = merge_different_meanings(filtered_words)           
 
     return filtered_words 
-
-
-# is this redundant?
-def merge_different_meanings(filtered_words):    
-    unique_content = set([w.content for w in filtered_words])
-    merged_words = []
-    
-    for u in unique_content:
-        words_to_be_merged = [w for w in filtered_words if w.content == u]        
-            
-        last_mentioned_on = random.choice([w.last_mentioned_on for w in words_to_be_merged])                
-        google_results = None
-        part_of_speech = ' | '.join([w.part_of_speech for w in words_to_be_merged])
-        meanings = ' | '.join([w.meanings for w in words_to_be_merged])
-        
-        word = Word(u, last_mentioned_on, google_results, part_of_speech, meanings)                
-        
-        merged_words.append(word)     
-
-    return merged_words       
-        
+       
 
 
 def show_ordered_suggestions(suggestions):
     print('SUGGESTIONS ', end='')
-    max_num = 8
+    max_num = 1
               
     if (len(suggestions) > max_num):
         print('(' + str(max_num) + ' of ' + str(len(suggestions)) + ' words from database):')   
