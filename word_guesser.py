@@ -66,9 +66,35 @@ def filter_words(words, right_position, other_position, discarded):
     
     if ((len(other_position) + len(right_position)) <= 2):
         filtered_words = [w for w in filtered_words if len(set(w.content)) == 5]    
+        
+    filtered_words = merge_different_meanings(filtered_words)        
 
     return filtered_words 
 
+
+
+def merge_different_meanings(filtered_words):    
+    unique_content = set([w.content for w in filtered_words])
+    merged_words = []
+    
+    for u in unique_content:
+        words_to_be_merged = [w for w in filtered_words if w.content == u]
+        
+        content = u
+        # last_mentioned_on = random.choice([w.last_mentioned_on for w in words_to_be_merged])
+        last_mentioned_on = None
+        # google_results = random.choice([w.google_results for w in words_to_be_merged])
+        google_results = None
+        part_of_speech = ' | '.join([w.part_of_speech for w in words_to_be_merged])
+        meanings = ' | '.join([w.meanings for w in words_to_be_merged])
+        
+        word = Word(u, last_mentioned_on, google_results, part_of_speech, meanings)                
+        
+        merged_words.append(word) 
+    
+
+    return merged_words       
+        
 
 
 def show_ordered_suggestions(suggestions):
@@ -106,8 +132,8 @@ def show_notes(right_position, other_position, discarded):
     print('    discarded letters: ', end='')
     print(list(discarded.upper()))
     print(f'    keep these letters at: {right_guesses}')
-    print(f'    move these letters from: {other_position}\n')    
-
+    print(f'    move these letters from: {other_position}\n')   
+    
 
     
 words = load_word_list_from_file()
