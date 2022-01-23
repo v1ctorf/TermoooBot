@@ -71,29 +71,21 @@ def filter_words(words, right_position, other_position, discarded):
        
 
 
-def show_ordered_suggestions(suggestions):
-    print('SUGGESTIONS ', end='')
+def show_guess(guess):    
     max_num = 1
-              
-    if (len(suggestions) > max_num):
-        print('(' + str(max_num) + ' of ' + str(len(suggestions)) + ' words from database):')   
-        suggestions = random.sample(suggestions, max_num)
-    else:
-        random.shuffle(suggestions)
-        print('(' + str(len(suggestions)) + ' word(s) from database):')        
+    print('SUGGESTIONS' if max_num > 1 else 'SUGGESTION', end='\n')    
+
+    print('    ', end='')        
+    print(guess.content.upper(), end=' ')
+    print(f'({guess.part_of_speech})', end=': ')
+    print(guess.meanings, end=' ')
+    
+    last_mentioned_on = 'not found'
+    
+    if guess.last_mentioned_on != None:
+        last_mentioned_on = guess.last_mentioned_on.strftime("%Y-%m-%d")
         
-    for i in suggestions:
-        print('    ', end='')        
-        print(i.content.upper(), end=' ')
-        print(f'({i.part_of_speech})', end=': ')
-        print(i.meanings, end=' ')
-        
-        last_mentioned_on = 'not found'
-        
-        if i.last_mentioned_on != None:
-            last_mentioned_on = i.last_mentioned_on.strftime("%Y-%m-%d")
-            
-        print(f'[Last mentioned on: {last_mentioned_on}]\n')
+    print(f'[Last mentioned on: {last_mentioned_on}]\n')
         
         
         
@@ -130,8 +122,9 @@ discarded = ''
 
 while not end_game:
     show_notes(right_position, other_position, discarded)    
-    suggestions = filter_words(words, right_position, other_position, discarded)      
-    show_ordered_suggestions(suggestions)
+    suggestions = filter_words(words, right_position, other_position, discarded) 
+    guess = random.choice(suggestions)
+    show_guess(guess)
             
     word = input('\ntype your attempt: ').lower().strip()
     result = input(f'did "{word}" work? [y|n]: ').lower().strip()    
