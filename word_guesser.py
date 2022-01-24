@@ -37,7 +37,7 @@ def set_words_scope(words):
 
 
 
-def filter_words(words, right_position, other_position, discarded):    
+def filter_words(words, right_position, other_position, discarded, attempt):    
     filtered_words = words
     
     for letter, position in right_position.items():
@@ -50,7 +50,7 @@ def filter_words(words, right_position, other_position, discarded):
             
     filtered_words = [w for w in filtered_words if not set(w.content).intersection(discarded)]
     
-    if ((len(other_position) + len(right_position)) <= 2):
+    if ((len(other_position) + len(right_position)) <= 2) and attempt < 4:
         filtered_words = [w for w in filtered_words if len(set(w.content)) == 5]    
 
     return filtered_words 
@@ -67,8 +67,7 @@ def guess_word_from_suggestion_list(suggestions):
            
 
 
-def show_guess(guess):        
-    print('SUGGESTION:', end='\n')
+def show_guess(guess):            
     print('    ', end='')        
     print(guess.content.upper(), end=' ')
     print(f'({guess.part_of_speech})', end=': ')
@@ -79,7 +78,7 @@ def show_guess(guess):
     if guess.last_mentioned_on != None:
         last_mentioned_on = guess.last_mentioned_on.strftime("%Y-%m-%d")
         
-    print(f'[Last mentioned on: {last_mentioned_on}]\n')
+    print(f'[Last mentioned on: {last_mentioned_on}]')
         
         
         
@@ -110,10 +109,12 @@ end_game = False
 right_position = {}
 other_position = {}
 discarded = ''
+remaining_attempts = 6
 
-while not end_game:
-    show_notes(right_position, other_position, discarded)    
-    suggestions = filter_words(words, right_position, other_position, discarded) 
+for attempt in range(1, remaining_attempts + 1):
+    print(f'\n* * * ATTEMPT #{attempt} * * * \n')     
+    
+    suggestions = filter_words(words, right_position, other_position, discarded, attempt) 
     word = guess_word_from_suggestion_list(suggestions)
     show_guess(word)           
     right_position_count = 0
@@ -144,6 +145,8 @@ while not end_game:
         else:
             raise ValueError('feedback {feedback} does not exist')
             
-    if right_position_count == 5:
-        end_game = True
-        print('\nYOU WON! Congratulations.')
+    if right_position_count == 5:        
+        print('\nThe word must be ' + word.content.upper())        
+        break
+    else:
+        show_notes(right_position, other_position, discarded)       
