@@ -29,20 +29,6 @@ def load_word_list_from_file():
 
 
 
-def calculate_letters_distribution(words):
-    dict_letters = {}
-    
-    for word in words:
-        for letter in word.content:            
-            if letter in dict_letters:
-                dict_letters[letter] = dict_letters[letter] + 1
-            else:
-                dict_letters[letter] = 1
-        
-    return dict_letters   
-
-
-
 def set_words_scope(words):
     scope = [w for w in words if w.part_of_speech != None]    
     scope = [w for w in scope if 'substantivo' in w.part_of_speech or 'adjetivo' in w.part_of_speech] 
@@ -71,10 +57,8 @@ def filter_words(words, right_position, other_position, discarded):
        
 
 
-def show_guess(guess):    
-    max_num = 1
-    print('SUGGESTIONS' if max_num > 1 else 'SUGGESTION', end='\n')    
-
+def show_guess(guess):        
+    print('SUGGESTION:', end='\n')
     print('    ', end='')        
     print(guess.content.upper(), end=' ')
     print(f'({guess.part_of_speech})', end=': ')
@@ -110,10 +94,7 @@ def show_notes(right_position, other_position, discarded):
 
     
 words = load_word_list_from_file()
-
 words = set_words_scope(words)
-
-letters_distro = calculate_letters_distribution(words)
 
 end_game = False
 right_position = {}
