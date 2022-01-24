@@ -54,7 +54,17 @@ def filter_words(words, right_position, other_position, discarded):
         filtered_words = [w for w in filtered_words if len(set(w.content)) == 5]    
 
     return filtered_words 
-       
+
+
+
+def guess_word_from_suggestion_list(suggestions):
+    if len(suggestions) == 0:
+        raise ValueError('Suggestion list is empty: check filters, feedback or database')
+        
+    guess = random.choice(suggestions)
+    
+    return guess
+           
 
 
 def show_guess(guess):        
@@ -104,7 +114,8 @@ discarded = ''
 while not end_game:
     show_notes(right_position, other_position, discarded)    
     suggestions = filter_words(words, right_position, other_position, discarded) 
-    guess = random.choice(suggestions)
+    guess = guess_word_from_suggestion_list(suggestions)
+    
     show_guess(guess)
             
     word = input('\ntype your attempt: ').lower().strip()
@@ -119,9 +130,8 @@ while not end_game:
         if (letter in right_position):
             print('\n"' + letter.upper() + f'" is at position #{i}')
             continue
-
-        print('\n[R]ight | [O]ther | [D]iscard')                                
-        what_happened = ('what happened to "' + letter.upper() + '"? ')                
+               
+        what_happened = ('"' + letter.upper() + '" what happened ([R]ight | [O]ther | [D]iscard) ? ')
         feedback = input(what_happened).lower().strip()   
         
         if (feedback == 'r'):
