@@ -114,27 +114,22 @@ discarded = ''
 while not end_game:
     show_notes(right_position, other_position, discarded)    
     suggestions = filter_words(words, right_position, other_position, discarded) 
-    guess = guess_word_from_suggestion_list(suggestions)
+    word = guess_word_from_suggestion_list(suggestions)
+    show_guess(word)           
+    right_position_count = 0
     
-    show_guess(guess)
-            
-    word = input('\ntype your attempt: ').lower().strip()
-    result = input(f'did "{word}" work? [y|n]: ').lower().strip()    
-    
-    if result == 'y':
-        end_game = True
-        print('congratulations')
-        continue
-    
-    for i, letter in enumerate(word):
+    for i, letter in enumerate(word.content):
         if (letter in right_position):
+            right_position_count = right_position_count + 1
             print('\n"' + letter.upper() + f'" is at position #{i}')
             continue
                
-        what_happened = ('"' + letter.upper() + '" what happened ([R]ight | [O]ther | [D]iscard) ? ')
+        what_happened = ('"' + letter.upper() + '" position is ([R]ight | [O]ther | [D]iscard) ? ')
         feedback = input(what_happened).lower().strip()   
         
         if (feedback == 'r'):
+            right_position_count = right_position_count + 1
+            
             if letter in other_position:
                 other_position.pop(letter, None)
             
@@ -148,13 +143,7 @@ while not end_game:
             discarded = discarded + letter
         else:
             raise ValueError('feedback {feedback} does not exist')
-
-
-
-
-
-
-
-    
-        
-        
+            
+    if right_position_count == 5:
+        end_game = True
+        print('\nYOU WON! Congratulations.')
