@@ -103,13 +103,13 @@ class Game:
         self.filtered_words = filtered_words
         
 
-    def create_guess(self, attempt):
+    def take_guess(self, attempt):
         self.filter_words(attempt)
         
         if len(self.filtered_words) == 0:
             raise ValueError('Suggestion list is empty: check filters, feedback or database')
             
-        word = random.choice(self.filtered_words)         
+        word = random.choice(self.filtered_words)   
         return Guess(word) 
     
     
@@ -134,14 +134,14 @@ class Game:
         
     def play(self):
         for attempt in range(1, self.MAX_ATTEMPTS + 1):
+            # print(len(self.guesses))
             print(f'\n* * * ATTEMPT #{attempt} * * * \n')            
-            guess = self.create_guess(attempt)
-            guess.show()
-            right_position_count = 0         
+            guess = self.take_guess(attempt)
+            self.guesses.append(guess)            
+            guess.show()            
             
             for i, letter in enumerate(guess.word.content):
-                if (letter in self.right_letters):
-                    right_position_count = right_position_count + 1
+                if (letter in self.right_letters):            
                     print('\n"' + letter.upper() + f'" is at position #{i}')
                     continue
                        
@@ -149,8 +149,6 @@ class Game:
                 feedback = input(what_happened).lower().strip()   
                 
                 if (feedback == 'r'):
-                    right_position_count = right_position_count + 1
-                    
                     if letter in self.moving_letters:
                         self.moving_letters.pop(letter, None)
                     
@@ -165,16 +163,15 @@ class Game:
                 else:
                     raise ValueError('feedback {feedback} does not exist')
                     
-            if right_position_count == 5:        
+            if len(self.right_letters.keys()) == 5:        
                 print('\nThe word must be ' + guess.word.content.upper())        
                 break
             else:
                 self.show_notes()
-        
+        else:
+            if len(self.right_letters.keys()) < 5:
+                print(f'The word could not be guessed before {self.MAX_ATTEMPTS}')
                 
-        
-        
-        
 
 
 game = Game()
