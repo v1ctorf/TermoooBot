@@ -35,8 +35,14 @@ class Game:
     def __init__(self):
         self.created_at = datetime.now()
         self.word_base = []
+        self.word_scope = []
+        self.right_letters = {}
+        self.discarded_letters = ''
+        self.moving_letters = {}
         
         self.set_word_base()        
+        self.set_word_scope()   
+        
        
     def set_word_base(self):
         file = open("classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
@@ -52,15 +58,19 @@ class Game:
             word = Word(content, last_mentioned_on, google_results, part_of_speech, meanings)            
             self.word_base.append(word)                  
             
-        file.close()            
+        file.close()    
+        
+
+    def set_word_scope(self):
+        scope = [w for w in self.word_base if w.part_of_speech != None]    
+        self.word_scope = [w for w in scope if 'substantivo' in w.part_of_speech or 'adjetivo' in w.part_of_speech] 
+        # TODO handle words with history         
         
         # self.guesses        
-        # self.word_base
-        # self.word_scope        
-        # self.right_letters
-        # self.discarded_letters
-        # self.moving_letters
+        
+        
+        
 
 
 game = Game()
-print(len(game.word_base))
+print(len(game.word_scope))
