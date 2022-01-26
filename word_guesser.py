@@ -1,4 +1,4 @@
-import datetime, random, sys
+import random, sys
 
 sys.path.append("..")
 
@@ -105,7 +105,6 @@ def show_notes(right_position, other_position, discarded):
 words = load_word_list_from_file()
 words = set_words_scope(words)
 
-end_game = False
 right_position = {}
 other_position = {}
 discarded = ''

@@ -18,3 +18,9 @@ function checkResults() {
 submitGuess('feliz');
 checkResults();
 
+let message = document.getElementById('msg')
+message.innerText // Genial, Extraordinário, Fantástico
+
+// analisar a class wrong x right x place
+// #board > div:nth-child(1) > div:nth-child(1)
+

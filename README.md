@@ -7,8 +7,10 @@ Requirements: `pip install Unidecode`
 Road Map:
 -------
 + ~~necessarily evaluate the suggested word ~~
++ Create Game object
++ Use Selenium from Python to play directly on the website, like [here](https://stackoverflow.com/questions/30615157/sending-javascript-command-from-python-shell) 
 + Ask user if they want to update history (`last_mentioned_on` column on CSV file)
-+ Use Selenium from Python to play directly on the website, like [here](https://stackoverflow.com/questions/30615157/sending-javascript-command-from-python-shell)
++ include plural 4-letters nouns/adjectives in Portuguese 
 + Scrap data from Google to get the number of results, but maybe use [ProtonVPN with Python](https://pypi.org/project/protonvpn-cli/) to disguise the requests. This may be a way to order the guesses according to their relevance
 + Consider words with history
 + Tweet the results
