@@ -21,17 +21,34 @@ class Word:
         self.meanings = meanings
         
         
+        
+class Guess:
+    def __init__(self):
+        self.created_at = datetime.now()
+        # self.attempt_number
+        # self.word        
+        pass
+        
+        
+        
 class Game:
     def __init__(self):
         self.created_at = datetime.now()
-        self.remaining_attempts = 6
+        self.word_base = None
+        self.set_word_base()        
+       
+    def set_word_base(self):
+        self.word_base = ['agora','assim','zebra']
+                
         
+        
+        # self.guesses        
         # self.word_base
-        # self.word_scope
+        # self.word_scope        
         # self.right_letters
         # self.discarded_letters
         # self.moving_letters
 
 
 game = Game()
-print(game.created_at)        
+print(game.created_at, game.word_base)        
