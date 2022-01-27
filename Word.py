@@ -50,7 +50,7 @@ class Game:
         self.MAX_ATTEMPTS = 6        
         self.word_base = []
         self.word_scope = []
-        self.right_letters = {}
+        self.right_letters = []
         self.discarded_letters = ''
         self.moving_letters = {}
         self.filtered_words = []        
@@ -58,6 +58,13 @@ class Game:
         
         self.set_word_base()        
         self.set_word_scope()
+        self.set_right_letters()
+        
+    def set_right_letters(self):
+        self.right_letters = [None for i in range(5)]
+        
+    def count_right_letters(self):
+        return len(list(filter(None, self.right_letters)))
        
     def set_word_base(self):
         file = open("classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
@@ -82,18 +89,20 @@ class Game:
         
     def filter_words(self, attempt):    
         filtered_words = self.word_scope
-        
-        for letter, position in self.right_letters.items():
-            filtered_words = [w for w in filtered_words if w.content[position] == letter]
+
+        for i in range(0, len(self.right_letters)):
+            if self.right_letters[i] != None:
+                right = self.right_letters[i]
+                filtered_words = [w for w in filtered_words if w.content[i] == right]            
             
         for letter, positions in self.moving_letters.items():
             filtered_words = [w for w in filtered_words if letter in w.content]
             for p in positions:            
                 filtered_words = [w for w in filtered_words if w.content[p] != letter]                         
                 
-        filtered_words = [w for w in filtered_words if not set(w.content).intersection(self.discarded_letters)]
+        filtered_words = [w for w in filtered_words if not set(w.content).intersection(self.discarded_letters)]      
         
-        if ((len(self.moving_letters) + len(self.right_letters)) <= 2) and attempt < 4:
+        if (len(self.moving_letters) + self.count_right_letters()) <= 2 and attempt < 4:
             filtered_words = [w for w in filtered_words if len(set(w.content)) == 5]    
     
         self.filtered_words = filtered_words        
@@ -108,15 +117,7 @@ class Game:
         return Guess(word)     
     
     def show_notes(self):
-        right_guesses = list('_____')
-        inverse_dict =  {value:key for key, value in self.right_letters.items()}
-        
-        for i in range(5):
-            if i in inverse_dict:
-                right_guesses[i] = inverse_dict[i].upper()
-            else:
-                right_guesses[i] = '_'  
-                
+        right_guesses = [l.upper() if l else '_' for l in self.right_letters]                
         right_guesses = ' '.join(right_guesses)
             
         print('\nNOTES:')
@@ -126,9 +127,6 @@ class Game:
         print(f'    move these letters from: {self.moving_letters}\n')      
         
     def play(self):
-        #
-        # TODO! make self.right_letters A LIST
-        #
         for attempt in range(1, self.MAX_ATTEMPTS + 1):            
             print(f'\n* * * ATTEMPT #{attempt} * * * \n')            
             guess = self.take_guess(attempt)
@@ -136,7 +134,7 @@ class Game:
             guess.show()                        
             
             for i, letter in enumerate(guess.word.content):
-                if letter in self.right_letters and self.right_letters[letter] == i:            
+                if self.right_letters[i] == letter:
                     print('\n"' + letter.upper() + f'" is at position #{i}')
                     continue
                        
@@ -147,7 +145,7 @@ class Game:
                     if letter in self.moving_letters:
                         self.moving_letters.pop(letter, None)
                     
-                    self.right_letters[letter] = i                
+                    self.right_letters[i] = letter
                 elif feedback == 'o':
                     if letter in self.moving_letters:
                         self.moving_letters[letter].append(i)
@@ -158,13 +156,13 @@ class Game:
                 else:
                     raise ValueError('feedback {feedback} does not exist')
                     
-            if len(self.right_letters.keys()) == 5:        
+            if self.count_right_letters() == 5:        
                 print('\nThe word must be ' + guess.word.content.upper())        
                 break
             else:
                 self.show_notes()
         else:
-            if len(self.right_letters.keys()) < 5:
+            if self.count_right_letters() < 5:
                 print(f'The word could not be guessed before {self.MAX_ATTEMPTS}')
                 
 
