@@ -6,6 +6,7 @@ Requirements: `pip install Unidecode`
 
 Road Map:
 -------
++ use the official words data base https://github.com/fserb/pt-br/blob/master/palavras
 + Use Selenium from Python to play directly on the website, like [here](https://stackoverflow.com/questions/30615157/sending-javascript-command-from-python-shell) 
 + Ask user if they want to update history (`last_mentioned_on` column on CSV file)
 + include plural 4-letters nouns/adjectives in Portuguese 
