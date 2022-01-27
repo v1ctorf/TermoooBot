@@ -124,7 +124,19 @@ class Game:
         print(f'    keep these letters at: {right_guesses}')
         print('    discarded letters: ', end='')
         print(list(self.discarded_letters.upper()))    
-        print(f'    move these letters from: {self.moving_letters}\n')      
+        print(f'    move these letters from: {self.moving_letters}\n')  
+        
+    def append_right_letter(self, letter, position):
+        if letter in self.moving_letters:
+            self.moving_letters.pop(letter, None)
+        
+        self.right_letters[position] = letter
+        
+    def append_moving_letter(self, letter, position):
+        if letter in self.moving_letters:
+            self.moving_letters[letter].append(position)
+        else: 
+            self.moving_letters[letter] = [position]
         
     def play(self):
         for attempt in range(1, self.MAX_ATTEMPTS + 1):            
@@ -142,15 +154,9 @@ class Game:
                 feedback = input(what_happened).lower().strip()   
                 
                 if feedback == 'r':
-                    if letter in self.moving_letters:
-                        self.moving_letters.pop(letter, None)
-                    
-                    self.right_letters[i] = letter
+                    self.append_right_letter(letter, i)                    
                 elif feedback == 'o':
-                    if letter in self.moving_letters:
-                        self.moving_letters[letter].append(i)
-                    else: 
-                        self.moving_letters[letter] = [i]
+                    self.append_moving_letter(letter, i)
                 elif feedback == 'd':
                     self.discarded_letters = self.discarded_letters + letter
                 else:
@@ -164,8 +170,3 @@ class Game:
         else:
             if self.count_right_letters() < 5:
                 print(f'The word could not be guessed before {self.MAX_ATTEMPTS}')
-                
-
-
-game = Game()
-game.play()
