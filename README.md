@@ -6,7 +6,6 @@ Requirements: `pip install Unidecode`
 
 Road Map:
 -------
-
 + Use Selenium from Python to play directly on the website, like [here](https://stackoverflow.com/questions/30615157/sending-javascript-command-from-python-shell) 
 + Ask user if they want to update history (`last_mentioned_on` column on CSV file)
 + include plural 4-letters nouns/adjectives in Portuguese 

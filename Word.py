@@ -28,8 +28,7 @@ class Word:
 class Guess:
     def __init__(self, word: Word):
         self.created_at = datetime.now()
-        self.word = word
-        # self.attempt_number
+        self.word = word        
         
     def show(self):
         print('    ', end='')        
@@ -58,8 +57,7 @@ class Game:
         self.guesses = []
         
         self.set_word_base()        
-        self.set_word_scope() 
-        
+        self.set_word_scope()
        
     def set_word_base(self):
         file = open("classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
@@ -75,14 +73,12 @@ class Game:
             word = Word(content, last_mentioned_on, google_results, part_of_speech, meanings)            
             self.word_base.append(word)                  
             
-        file.close()   
-        
+        file.close() 
 
     def set_word_scope(self):
         scope = [w for w in self.word_base if w.part_of_speech != None]    
         self.word_scope = [w for w in scope if 'substantivo' in w.part_of_speech or 'adjetivo' in w.part_of_speech] 
-        # TODO handle words with history  
-        
+        # TODO handle words with history          
         
     def filter_words(self, attempt):    
         filtered_words = self.word_scope
@@ -100,8 +96,7 @@ class Game:
         if ((len(self.moving_letters) + len(self.right_letters)) <= 2) and attempt < 4:
             filtered_words = [w for w in filtered_words if len(set(w.content)) == 5]    
     
-        self.filtered_words = filtered_words
-        
+        self.filtered_words = filtered_words        
 
     def take_guess(self, attempt):
         self.filter_words(attempt)
@@ -110,8 +105,7 @@ class Game:
             raise ValueError('Suggestion list is empty: check filters, feedback or database')
             
         word = random.choice(self.filtered_words)   
-        return Guess(word) 
-    
+        return Guess(word)     
     
     def show_notes(self):
         right_guesses = list('_____')
@@ -129,36 +123,37 @@ class Game:
         print(f'    keep these letters at: {right_guesses}')
         print('    discarded letters: ', end='')
         print(list(self.discarded_letters.upper()))    
-        print(f'    move these letters from: {self.moving_letters}\n')   
-    
+        print(f'    move these letters from: {self.moving_letters}\n')      
         
     def play(self):
-        for attempt in range(1, self.MAX_ATTEMPTS + 1):
-            # print(len(self.guesses))
+        #
+        # TODO! make self.right_letters A LIST
+        #
+        for attempt in range(1, self.MAX_ATTEMPTS + 1):            
             print(f'\n* * * ATTEMPT #{attempt} * * * \n')            
             guess = self.take_guess(attempt)
             self.guesses.append(guess)            
-            guess.show()            
+            guess.show()                        
             
             for i, letter in enumerate(guess.word.content):
-                if (letter in self.right_letters):            
+                if letter in self.right_letters and self.right_letters[letter] == i:            
                     print('\n"' + letter.upper() + f'" is at position #{i}')
                     continue
                        
                 what_happened = ('"' + letter.upper() + '" position is ([R]ight | [O]ther | [D]iscard) ? ')
                 feedback = input(what_happened).lower().strip()   
                 
-                if (feedback == 'r'):
+                if feedback == 'r':
                     if letter in self.moving_letters:
                         self.moving_letters.pop(letter, None)
                     
                     self.right_letters[letter] = i                
-                elif (feedback == 'o'):
+                elif feedback == 'o':
                     if letter in self.moving_letters:
                         self.moving_letters[letter].append(i)
                     else: 
                         self.moving_letters[letter] = [i]
-                elif (feedback == 'd'):
+                elif feedback == 'd':
                     self.discarded_letters = self.discarded_letters + letter
                 else:
                     raise ValueError('feedback {feedback} does not exist')
