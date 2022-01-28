@@ -137,6 +137,10 @@ class Game:
             self.moving_letters[letter].append(position)
         else: 
             self.moving_letters[letter] = [position]
+            
+    def discard_letter(self, letter):
+        if letter not in self.right_letters:
+            self.discarded_letters = self.discarded_letters + letter
         
     def play(self):
         for attempt in range(1, self.MAX_ATTEMPTS + 1):            
@@ -158,7 +162,7 @@ class Game:
                 elif feedback == 'o':
                     self.append_moving_letter(letter, i)
                 elif feedback == 'd':
-                    self.discarded_letters = self.discarded_letters + letter
+                    self.discard_letter(letter)
                 else:
                     raise ValueError('feedback {feedback} does not exist')
                     

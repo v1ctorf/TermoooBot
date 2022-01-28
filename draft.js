@@ -8,19 +8,15 @@ function submitGuess(word) {
 
 function checkResults() {
     feedback = {}
-    let keyboard = document.getElementById('kbd');
-
-    for (key of keyboard.children){
-        console.log(key.innerText);    
+    for (key of keyboard.children) {
+        if (key.getAttribute('class') != null) {
+            feedback[key.innerText] = key.getAttribute('class');
+        }
     }
+    
+    return feedback;
 }
 
 submitGuess('feliz');
 checkResults();
-
-let message = document.getElementById('msg')
-message.innerText // Genial, Extraordinário, Fantástico
-
-// analisar a class wrong x right x place
-// #board > div:nth-child(1) > div:nth-child(1)
 
