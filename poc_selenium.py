@@ -17,7 +17,7 @@ def submit_guess(word_content):
     for letter in word_content:
         letter_key = driver.find_element_by_id(f'kbd_{letter}')
         letter_key.click()
-        time.sleep(2)
+        time.sleep(1)
                 
     enter_key = driver.find_element_by_id('kbd_enter')
     enter_key.click()
@@ -26,4 +26,4 @@ def submit_guess(word_content):
     driver.close()        
         
 
-submit_guess('chula')
+submit_guess('feliz')

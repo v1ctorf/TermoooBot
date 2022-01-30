@@ -1,8 +1,10 @@
-import random, sys
+import random, sys, time
 
 sys.path.append("..")
 
 from datetime import datetime
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 
 
@@ -25,7 +27,7 @@ class Word:
             self.part_of_speech = part_of_speech   
             
         self.meanings = meanings        
-       
+        
         
         
 class Guess:
@@ -45,8 +47,8 @@ class Guess:
         if self.word.last_mentioned_on != None:
             last_mentioned_on = self.word.last_mentioned_on.strftime("%Y-%m-%d")
             
-        print(f'[Last mentioned on: {last_mentioned_on}]')         
- 
+        print(f'[Last mentioned on: {last_mentioned_on}]')
+        
         
         
 class Game:
@@ -60,10 +62,30 @@ class Game:
         self.moving_letters = {}
         self.filtered_words = []        
         self.guesses = []
+        self.driver = None
         
         self.set_word_base()        
         self.set_word_scope()
         self.set_right_letters()
+        self.set_driver()
+        
+        
+    def set_driver(self):
+        path = "C:\Python\geckodriver\geckodriver.exe"
+        self.driver = webdriver.Firefox(executable_path = path)        
+       
+        
+    def open_page(self):
+        self.driver.get("https://term.ooo")
+        assert "Termo" in self.driver.title
+        time.sleep(1)
+        help_modal = self.driver.find_element_by_id('helpclose')
+        help_modal.click()
+        time.sleep(2)
+        
+    
+    def close_page(self):
+        self.driver.close() 
         
         
     def set_right_letters(self):
@@ -182,11 +204,12 @@ class Game:
             elif feedback == 'w':
                 self.mark_letter_as_wrong(letter)
             else:
-                print('INVALID FEEDBACK. Try again.')
-        
+                print('INVALID FEEDBACK. Try again.')                       
         
         
     def play(self):
+        self.open_page()
+        
         for attempt in range(1, self.MAX_ATTEMPTS + 1):            
             print(f'\n* * * ATTEMPT #{attempt} * * * \n')            
             guess = self.take_guess(attempt)
@@ -208,3 +231,5 @@ class Game:
         else:
             if self.count_right_letters() < 5:
                 print(f'The word could not be guessed before {self.MAX_ATTEMPTS}')
+                
+        self.close_page()
