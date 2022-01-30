@@ -147,7 +147,18 @@ class Game:
             raise ValueError('Suggestion list is empty: check filters, feedback or database')
             
         word = random.choice(self.filtered_words)   
-        return Guess(word)     
+        return Guess(word)    
+    
+    
+    def submit_guess(self, guess: Guess):
+        for letter in guess.word.content:
+            letter_key = self.driver.find_element_by_id(f'kbd_{letter}')
+            letter_key.click()
+            time.sleep(1)
+                    
+        enter_key = self.driver.find_element_by_id('kbd_enter')
+        enter_key.click()
+    
     
     
     def show_notes(self):
@@ -214,7 +225,8 @@ class Game:
             print(f'\n* * * ATTEMPT #{attempt} * * * \n')            
             guess = self.take_guess(attempt)
             self.guesses.append(guess)            
-            guess.show()                        
+            guess.show()    
+            self.submit_guess(guess)
             
             for i, letter in enumerate(guess.word.content):
                 if self.right_letters[i] == letter:
