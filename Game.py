@@ -1,10 +1,10 @@
-import random, sys, time
+import random, sys, time, yaml
 
 sys.path.append("..")
 
 from datetime import datetime
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.common.keys import Keys
 from unidecode import unidecode
 
 
@@ -50,9 +50,22 @@ class Guess:
             
         print(f'[Last mentioned on: {last_mentioned_on}]')
         
+
+
+class Twittr:    
+    def __init__(self):
+        pass
+    
+    
+    def get_bearer_token():
+        with open('config.yml') as f:    
+            config_vars = yaml.safe_load(f)
+        
+        return config_vars['bearer_token']
+   
         
         
-class Game:
+class TermoooBot:
     def __init__(self):
         self.created_at = datetime.now()
         self.MAX_ATTEMPTS = 6        
@@ -188,14 +201,6 @@ class Game:
             
             
     def mark_letter_as_wrong(self, letter):
-        # TODO discard a letter for a specific position ONLY
-        # discard letters is a dictionary - not a list!
-        
-        # if a letter is played > 1 and one position is right, 
-        #   the other guesses for this letter are discarded
-        # if a letter is played once and one position is wrong, it's a moving letter
-        #   the game gives you one "right" or "place" feedback at the time
-        #   evaluate the whole thing before discarding letters
         if letter not in self.right_letters and letter not in self.moving_letters.keys():
             self.wrong_letters = self.wrong_letters + letter   
     
@@ -220,8 +225,7 @@ class Game:
                 raise ValueError('Can\'t process result from page.')
         else:
             for letter in discard:
-                self.mark_letter_as_wrong(letter)                
-                
+                self.mark_letter_as_wrong(letter)                                
         
         
     def play(self):

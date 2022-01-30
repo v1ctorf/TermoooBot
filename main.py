@@ -2,8 +2,8 @@ import sys
 
 sys.path.append("..")
 
-from Game import Game
+from Game import TermoooBot
 
-game = Game()
-game.play()
+player = TermoooBot()
+player.play()
 
