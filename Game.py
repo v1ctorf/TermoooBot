@@ -203,7 +203,8 @@ class Game:
     def check_results(self):        
         rows = self.driver.find_elements_by_class_name('row')
         page_input = rows[len(self.guesses) - 1]
-        input_letters = page_input.find_elements_by_class_name('letter')
+        input_letters = page_input.find_elements_by_class_name('letter')        
+        discard = []
         
         for i, letter_element in enumerate(input_letters):
             result = letter_element.get_attribute('class').split(' ')[1]
@@ -214,9 +215,13 @@ class Game:
             elif result == 'place':
                 self.mark_letter_as_place(letter, i)
             elif result == 'wrong':
-                self.mark_letter_as_wrong(letter)   
+                discard.append(letter)
             else:
                 raise ValueError('Can\'t process result from page.')
+        else:
+            for letter in discard:
+                self.mark_letter_as_wrong(letter)                
+                
         
         
     def play(self):
