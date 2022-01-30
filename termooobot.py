@@ -4,7 +4,6 @@ sys.path.append("..")
 
 from datetime import datetime
 from selenium import webdriver
-# from selenium.webdriver.common.keys import Keys
 from unidecode import unidecode
 
 
@@ -76,7 +75,8 @@ class TermoooBot:
         self.moving_letters = {}
         self.filtered_words = []        
         self.guesses = []
-        self.driver = None        
+        self.driver = None    
+        self.today_stats = None
         
         self.set_word_base()        
         self.set_word_scope()
@@ -232,7 +232,7 @@ class TermoooBot:
         stats_share = self.driver.find_element_by_id('stats_share')
         stats_share.click()
         content = pyperclip.paste()
-        print(content)
+        self.today_stats = content        
         time.sleep(2)
         
         
