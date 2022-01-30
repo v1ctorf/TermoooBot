@@ -4,6 +4,8 @@ sys.path.append("..")
 
 from datetime import datetime
 
+
+
 class Word:
     def __init__(self, content, last_mentioned_on, google_results, part_of_speech, meanings):
         self.content = content
@@ -23,12 +25,14 @@ class Word:
             self.part_of_speech = part_of_speech   
             
         self.meanings = meanings        
+       
         
         
 class Guess:
     def __init__(self, word: Word):
         self.created_at = datetime.now()
         self.word = word        
+        
         
     def show(self):
         print('    ', end='')        
@@ -42,6 +46,7 @@ class Guess:
             last_mentioned_on = self.word.last_mentioned_on.strftime("%Y-%m-%d")
             
         print(f'[Last mentioned on: {last_mentioned_on}]')         
+ 
         
         
 class Game:
@@ -60,12 +65,15 @@ class Game:
         self.set_word_scope()
         self.set_right_letters()
         
+        
     def set_right_letters(self):
         self.right_letters = [None for i in range(5)]
+        
         
     def count_right_letters(self):
         return len(list(filter(None, self.right_letters)))
        
+        
     def set_word_base(self):
         file = open("classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
         lines = file.readlines()[1:]            
@@ -82,10 +90,12 @@ class Game:
             
         file.close() 
 
+
     def set_word_scope(self):
         scope = [w for w in self.word_base if w.part_of_speech != None]    
-        self.word_scope = [w for w in scope if 'substantivo' in w.part_of_speech or 'adjetivo' in w.part_of_speech] 
-        # TODO handle words with history          
+        self.word_scope = [w for w in scope if 'substantivo' in w.part_of_speech or 'adjetivo' in w.part_of_speech]
+        self.word_scope = [w for w in self.word_scope if w.last_mentioned_on == None]        
+        
         
     def filter_words(self, attempt):    
         filtered_words = self.word_scope
@@ -107,6 +117,7 @@ class Game:
     
         self.filtered_words = filtered_words        
 
+
     def take_guess(self, attempt):
         self.filter_words(attempt)
         
@@ -115,6 +126,7 @@ class Game:
             
         word = random.choice(self.filtered_words)   
         return Guess(word)     
+    
     
     def show_notes(self):
         right_guesses = [l.upper() if l else '_' for l in self.right_letters]                
@@ -126,21 +138,33 @@ class Game:
         print(list(self.discarded_letters.upper()))    
         print(f'    move these letters from: {self.moving_letters}\n')  
         
-    def append_right_letter(self, letter, position):
+        
+    def mark_letter_as_right(self, letter, position):
         if letter in self.moving_letters:
             self.moving_letters.pop(letter, None)
         
         self.right_letters[position] = letter
         
-    def append_moving_letter(self, letter, position):
+        
+    def mark_letter_as_place(self, letter, position):
         if letter in self.moving_letters:
             self.moving_letters[letter].append(position)
         else: 
             self.moving_letters[letter] = [position]
             
-    def discard_letter(self, letter):
+            
+    def mark_letter_as_wrong(self, letter):
+        # TODO discard a letter for a specific position ONLY
+        # discard letters is a dictionary - not a list!
+        
+        # if a letter is played > 1 and one position is right, 
+        #   the other guesses for this letter are discarded
+        # if a letter is played once and one position is wrong, it's a moving letter
+        #   the game gives you one "right" or "place" feedback at the time
+        #   evaluate the whole thing before discarding letters
         if letter not in self.right_letters:
             self.discarded_letters = self.discarded_letters + letter
+        
         
     def play(self):
         for attempt in range(1, self.MAX_ATTEMPTS + 1):            
@@ -158,11 +182,11 @@ class Game:
                 feedback = input(what_happened).lower().strip()   
                 
                 if feedback == 'r':
-                    self.append_right_letter(letter, i)                    
+                    self.mark_letter_as_right(letter, i)                    
                 elif feedback == 'o':
-                    self.append_moving_letter(letter, i)
+                    self.mark_letter_as_place(letter, i)
                 elif feedback == 'd':
-                    self.discard_letter(letter)
+                    self.mark_letter_as_wrong(letter)
                 else:
                     raise ValueError('feedback {feedback} does not exist')
                     

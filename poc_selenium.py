@@ -1,6 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
+# path="C:\\Program Files\\geckodriver\\geckodriver.exe"
+path="C:\\Python\\geckodriver\\geckodriver.exe"
+
+driver=webdriver.Firefox(path)
+
 driver = webdriver.Firefox()
 driver.get("http://www.python.org")
 assert "Python" in driver.title
