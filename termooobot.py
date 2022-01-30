@@ -1,4 +1,4 @@
-import random, sys, time, yaml, pyperclip
+import random, sys, time, yaml, pyperclip, requests
 
 sys.path.append("..")
 
@@ -51,16 +51,34 @@ class Guess:
         
 
 
-class Twittr:    
+class SocialMedia:    
     def __init__(self):
-        pass
+        self.bearer = None
+        self.header = None
+        self.api_base_url = "https://api.twitter.com/2"
+        self.set_bearer_token()
+        self.set_header()
     
     
-    def get_bearer_token():
+    def set_bearer_token(self):
         with open('config.yml') as f:    
             config_vars = yaml.safe_load(f)
         
-        return config_vars['bearer_token']
+        self.bearer = config_vars['bearer_token']        
+        
+
+    def set_header(self):        
+        self.header = {'Authorization': f'Bearer {self.bearer}'}
+        
+            
+    def request_tweet(self, tweet_id):            
+        uri = f'{self.api_base_url}/tweets/{tweet_id}' # a specific tweet                
+        response = requests.get(uri, headers = self.header)
+        
+        print(f'Status Code: {response.status_code}')    
+        response_json = response.json() 
+        
+        print(response_json)
    
         
         
@@ -76,14 +94,18 @@ class TermoooBot:
         self.filtered_words = []        
         self.guesses = []
         self.driver = None    
-        self.today_stats = None
+        self.today_stats = None        
+        self.social = SocialMedia()
         
         self.set_word_base()        
         self.set_word_scope()
-        self.set_right_letters()
-        self.set_driver()
+        self.set_right_letters()        
+       
         
+    # def set_social(self, social: SocialMedia):
         
+    
+    
     def set_driver(self):
         path = "C:\Python\geckodriver\geckodriver.exe"
         self.driver = webdriver.Firefox(executable_path = path)        
@@ -228,15 +250,15 @@ class TermoooBot:
                 self.mark_letter_as_wrong(letter)      
 
 
-    def share_stats(self):
+    def set_today_stats(self):
         stats_share = self.driver.find_element_by_id('stats_share')
-        stats_share.click()
-        content = pyperclip.paste()
-        self.today_stats = content        
+        stats_share.click()        
+        self.today_stats = pyperclip.paste()
         time.sleep(2)
         
         
     def play(self):
+        self.set_driver()
         self.open_page()
         
         for attempt in range(1, self.MAX_ATTEMPTS + 1):            
@@ -256,5 +278,5 @@ class TermoooBot:
             if self.count_right_letters() < 5:
                 print(f'The word could not be guessed before {self.MAX_ATTEMPTS}')
                 
-        self.share_stats()
+        self.set_today_stats()
         self.close_page()
