@@ -180,7 +180,9 @@ class Game:
             elif feedback == 'p':
                 self.mark_letter_as_place(letter, i)
             elif feedback == 'w':
-                self.mark_letter_as_wrong(letter)        
+                self.mark_letter_as_wrong(letter)
+            else:
+                print('INVALID FEEDBACK. Try again.')
         
         
         

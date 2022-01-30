@@ -1,18 +1,29 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
+import time
 
 
-driver=webdriver.Firefox(executable_path="C:\Python\geckodriver\geckodriver.exe")
-driver.get("http://www.python.org")
+def submit_guess(word_content):
+    driver=webdriver.Firefox(executable_path="C:\Python\geckodriver\geckodriver.exe")
+    driver.get("https://term.ooo")
+    assert "Termo" in driver.title
+    time.sleep(2)
+    
+    help_modal = driver.find_element_by_id('helpclose')
+    help_modal.click()
+    time.sleep(2)
 
-assert "Python" in driver.title
+    for letter in word_content:
+        letter_key = driver.find_element_by_id(f'kbd_{letter}')
+        letter_key.click()
+        time.sleep(2)
+                
+    enter_key = driver.find_element_by_id('kbd_enter')
+    enter_key.click()
+    
+    time.sleep(2)        
+    driver.close()        
+        
 
-elem = driver.find_element_by_name("q")
-elem.clear()
-elem.send_keys("pycon")
-elem.send_keys(Keys.RETURN)
-
-assert "No results found." not in driver.page_source
-
-driver.close()
+submit_guess('chula')
