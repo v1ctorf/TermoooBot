@@ -2,7 +2,7 @@ import sys
 
 sys.path.append("..")
 
-from Game import TermoooBot
+from termooobot import TermoooBot
 
 player = TermoooBot()
 player.play()
