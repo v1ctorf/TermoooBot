@@ -56,7 +56,7 @@ class Game:
         self.word_base = []
         self.word_scope = []
         self.right_letters = []
-        self.discarded_letters = ''
+        self.wrong_letters = ''
         self.moving_letters = {}
         self.filtered_words = []        
         self.guesses = []
@@ -110,7 +110,7 @@ class Game:
             for p in positions:            
                 filtered_words = [w for w in filtered_words if w.content[p] != letter]                         
                 
-        filtered_words = [w for w in filtered_words if not set(w.content).intersection(self.discarded_letters)]      
+        filtered_words = [w for w in filtered_words if not set(w.content).intersection(self.wrong_letters)]      
         
         if (len(self.moving_letters) + self.count_right_letters()) <= 2 and attempt < 4:
             filtered_words = [w for w in filtered_words if len(set(w.content)) == 5]    
@@ -135,7 +135,7 @@ class Game:
         print('\nNOTES:')
         print(f'    keep these letters at: {right_guesses}')
         print('    discarded letters: ', end='')
-        print(list(self.discarded_letters.upper()))    
+        print(list(self.wrong_letters.upper()))    
         print(f'    move these letters from: {self.moving_letters}\n')  
         
         
@@ -163,7 +163,25 @@ class Game:
         #   the game gives you one "right" or "place" feedback at the time
         #   evaluate the whole thing before discarding letters
         if letter not in self.right_letters:
-            self.discarded_letters = self.discarded_letters + letter
+            self.wrong_letters = self.wrong_letters + letter
+            
+    
+    def get_feedback(self, letter, position):
+        valid_feedback = list('rpw')
+        i = position
+        what_happened = ('"' + letter.upper() + '" position is ([R]ight | [P]lace | [W]rong) ? ')
+        feedback = ''
+        
+        while feedback not in valid_feedback:            
+            feedback = input(what_happened).lower().strip()   
+        
+            if feedback == 'r':
+                self.mark_letter_as_right(letter, i)                    
+            elif feedback == 'p':
+                self.mark_letter_as_place(letter, i)
+            elif feedback == 'w':
+                self.mark_letter_as_wrong(letter)        
+        
         
         
     def play(self):
@@ -178,17 +196,7 @@ class Game:
                     print('\n"' + letter.upper() + f'" is at position #{i}')
                     continue
                        
-                what_happened = ('"' + letter.upper() + '" position is ([R]ight | [O]ther | [D]iscard) ? ')
-                feedback = input(what_happened).lower().strip()   
-                
-                if feedback == 'r':
-                    self.mark_letter_as_right(letter, i)                    
-                elif feedback == 'o':
-                    self.mark_letter_as_place(letter, i)
-                elif feedback == 'd':
-                    self.mark_letter_as_wrong(letter)
-                else:
-                    raise ValueError('feedback {feedback} does not exist')
+                self.get_feedback(letter, i)
                     
             if self.count_right_letters() == 5:        
                 print('\nThe word must be ' + guess.word.content.upper())        
