@@ -215,7 +215,31 @@ class Game:
             elif feedback == 'w':
                 self.mark_letter_as_wrong(letter)
             else:
-                print('INVALID FEEDBACK. Try again.')                       
+                print('INVALID FEEDBACK. Try again.')       
+    
+    '''                    
+        function checkResults() {
+            feedback = {}
+            for (key of keyboard.children) {
+                if (key.getAttribute('class') != null) {
+                    feedback[key.innerText] = key.getAttribute('class');
+                }
+            }
+            
+            return feedback;
+        }
+                
+    '''        
+    def check_results(self):
+        time.sleep(3)
+        rows = self.driver.find_elements_by_class_name('row')
+        page_input = rows[len(self.guesses) - 1]
+        input_letters = page_input.find_elements_by_class_name('letter')
+        
+        for letter in input_letters:
+            print(letter.get_attribute('class'))
+            #result = letter.get_attribute('class')
+            #print(f'"{letter.text}": {result}')
         
         
     def play(self):
@@ -227,6 +251,8 @@ class Game:
             self.guesses.append(guess)            
             guess.show()    
             self.submit_guess(guess)
+            time.sleep(1)
+            self.check_results()
             
             for i, letter in enumerate(guess.word.content):
                 if self.right_letters[i] == letter:
