@@ -5,6 +5,7 @@ sys.path.append("..")
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from unidecode import unidecode
 
 
 
@@ -62,7 +63,7 @@ class Game:
         self.moving_letters = {}
         self.filtered_words = []        
         self.guesses = []
-        self.driver = None
+        self.driver = None        
         
         self.set_word_base()        
         self.set_word_scope()
@@ -195,7 +196,7 @@ class Game:
         # if a letter is played once and one position is wrong, it's a moving letter
         #   the game gives you one "right" or "place" feedback at the time
         #   evaluate the whole thing before discarding letters
-        if letter not in self.right_letters:
+        if letter not in self.right_letters and letter not in self.moving_letters.keys():
             self.wrong_letters = self.wrong_letters + letter   
     
         
@@ -206,13 +207,14 @@ class Game:
         
         for i, letter_element in enumerate(input_letters):
             result = letter_element.get_attribute('class').split(' ')[1]
+            letter = unidecode(letter_element.text.lower())
             
-            if result == 'right':
-                self.mark_letter_as_right(letter_element.text.lower(), i)
+            if result == 'right':                
+                self.mark_letter_as_right(letter, i)
             elif result == 'place':
-                self.mark_letter_as_place(letter_element.text.lower(), i)
+                self.mark_letter_as_place(letter, i)
             elif result == 'wrong':
-                self.mark_letter_as_wrong(letter_element.text.lower())   
+                self.mark_letter_as_wrong(letter)   
             else:
                 raise ValueError('Can\'t process result from page.')
         
