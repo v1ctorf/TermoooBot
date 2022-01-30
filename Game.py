@@ -1,4 +1,4 @@
-import random, sys, time, yaml
+import random, sys, time, yaml, pyperclip
 
 sys.path.append("..")
 
@@ -225,7 +225,15 @@ class TermoooBot:
                 raise ValueError('Can\'t process result from page.')
         else:
             for letter in discard:
-                self.mark_letter_as_wrong(letter)                                
+                self.mark_letter_as_wrong(letter)      
+
+
+    def share_stats(self):
+        stats_share = self.driver.find_element_by_id('stats_share')
+        stats_share.click()
+        content = pyperclip.paste()
+        print(content)
+        time.sleep(2)
         
         
     def play(self):
@@ -248,4 +256,5 @@ class TermoooBot:
             if self.count_right_letters() < 5:
                 print(f'The word could not be guessed before {self.MAX_ATTEMPTS}')
                 
+        self.share_stats()
         self.close_page()
