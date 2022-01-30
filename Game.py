@@ -157,8 +157,8 @@ class Game:
             time.sleep(1)
                     
         enter_key = self.driver.find_element_by_id('kbd_enter')
-        enter_key.click()
-    
+        enter_key.click()  
+        time.sleep(3)
     
     
     def show_notes(self):
@@ -196,50 +196,25 @@ class Game:
         #   the game gives you one "right" or "place" feedback at the time
         #   evaluate the whole thing before discarding letters
         if letter not in self.right_letters:
-            self.wrong_letters = self.wrong_letters + letter
-            
+            self.wrong_letters = self.wrong_letters + letter   
     
-    def get_feedback(self, letter, position):
-        valid_feedback = list('rpw')
-        i = position
-        what_happened = ('"' + letter.upper() + '" position is ([R]ight | [P]lace | [W]rong) ? ')
-        feedback = ''
         
-        while feedback not in valid_feedback:            
-            feedback = input(what_happened).lower().strip()   
-        
-            if feedback == 'r':
-                self.mark_letter_as_right(letter, i)                    
-            elif feedback == 'p':
-                self.mark_letter_as_place(letter, i)
-            elif feedback == 'w':
-                self.mark_letter_as_wrong(letter)
-            else:
-                print('INVALID FEEDBACK. Try again.')       
-    
-    '''                    
-        function checkResults() {
-            feedback = {}
-            for (key of keyboard.children) {
-                if (key.getAttribute('class') != null) {
-                    feedback[key.innerText] = key.getAttribute('class');
-                }
-            }
-            
-            return feedback;
-        }
-                
-    '''        
-    def check_results(self):
-        time.sleep(3)
+    def check_results(self):        
         rows = self.driver.find_elements_by_class_name('row')
         page_input = rows[len(self.guesses) - 1]
         input_letters = page_input.find_elements_by_class_name('letter')
         
-        for letter in input_letters:
-            print(letter.get_attribute('class'))
-            #result = letter.get_attribute('class')
-            #print(f'"{letter.text}": {result}')
+        for i, letter_element in enumerate(input_letters):
+            result = letter_element.get_attribute('class').split(' ')[1]
+            
+            if result == 'right':
+                self.mark_letter_as_right(letter_element.text.lower(), i)
+            elif result == 'place':
+                self.mark_letter_as_place(letter_element.text.lower(), i)
+            elif result == 'wrong':
+                self.mark_letter_as_wrong(letter_element.text.lower())   
+            else:
+                raise ValueError('Can\'t process result from page.')
         
         
     def play(self):
@@ -250,17 +225,9 @@ class Game:
             guess = self.take_guess(attempt)
             self.guesses.append(guess)            
             guess.show()    
-            self.submit_guess(guess)
-            time.sleep(1)
+            self.submit_guess(guess)            
             self.check_results()
-            
-            for i, letter in enumerate(guess.word.content):
-                if self.right_letters[i] == letter:
-                    print('\n"' + letter.upper() + f'" is at position #{i}')
-                    continue
-                       
-                self.get_feedback(letter, i)
-                    
+                   
             if self.count_right_letters() == 5:        
                 print('\nThe word must be ' + guess.word.content.upper())        
                 break
