@@ -99,11 +99,7 @@ class TermoooBot:
         
         self.set_word_base()        
         self.set_word_scope()
-        self.set_right_letters()        
-       
-        
-    # def set_social(self, social: SocialMedia):
-        
+        self.set_right_letters()                
     
     
     def set_driver(self):
@@ -152,7 +148,8 @@ class TermoooBot:
     def set_word_scope(self):
         scope = [w for w in self.word_base if w.part_of_speech != None]    
         self.word_scope = [w for w in scope if 'substantivo' in w.part_of_speech or 'adjetivo' in w.part_of_speech]
-        self.word_scope = [w for w in self.word_scope if w.last_mentioned_on == None]        
+        self.word_scope = [w for w in self.word_scope if w.last_mentioned_on == None]    
+        # todo mind last_mentioned only if it's older than today
         
         
     def filter_words(self, attempt):    
@@ -270,7 +267,8 @@ class TermoooBot:
             self.check_results()
                    
             if self.count_right_letters() == 5:        
-                print('\nThe word must be ' + guess.word.content.upper())        
+                print('\nThe word must be ' + guess.word.content.upper())   
+                # TODO Record today date on last_mentioned_on
                 break
             else:
                 self.show_notes()
