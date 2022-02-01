@@ -79,6 +79,17 @@ class SocialMedia:
         response_json = response.json() 
         
         print(response_json)
+       
+        
+    def tweet(self, text):
+        uri = f'{self.api_base_url}/tweets'
+        response = requests.post(uri, headers=self.header, data={'text':text})
+        response.raise_for_status() 
+        
+        print(f'Status Code: {response.status_code}')    
+        response_json = response.json() 
+        
+        print(response_json)
    
         
         

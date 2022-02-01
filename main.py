@@ -6,6 +6,6 @@ from termooobot import TermoooBot
 
 player = TermoooBot()
 player.play()
-print(player.today_stats)
-# player.social.request_tweet(1487842545505910784)
-
+# player.social.tweet(player.today_stats)
+# print(player.social.tweet('teste'))
+# # print(player.social.request_tweet(1488300321789067265))
