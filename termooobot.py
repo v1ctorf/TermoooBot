@@ -158,7 +158,7 @@ class TermoooBot:
 
     def set_word_scope(self):
         scope = [w for w in self.word_base if w.part_of_speech != None]    
-        self.word_scope = [w for w in scope if 'substantivo' in w.part_of_speech or 'adjetivo' in w.part_of_speech]
+        self.word_scope = [w for w in scope if 'substantivo' in w.part_of_speech or 'adjetivo' in w.part_of_speech or 'verbo' in w.part_of_speech]
         self.word_scope = [w for w in self.word_scope if w.last_mentioned_on == None]    
         # todo mind last_mentioned only if it's older than today
         
