@@ -9,8 +9,8 @@ Requirements:
 
 Road Map:
 -------
++ Tweet the results
 + use the official words data base https://github.com/fserb/pt-br/blob/master/palavras
 + Update history (`last_mentioned_on` column on CSV file)
-+ Tweet the results
-+ Scrap data from Google to get the number of results, but maybe use [ProtonVPN with Python](https://pypi.org/project/protonvpn-cli/) to disguise the requests. This may be a way to order the guesses according to their relevance
-+ Mark missed guesses as valid or invalid words for the game
++ Make a simulator considering a significant amount of unique guesses
++ Implement a smarter guessing strategy
