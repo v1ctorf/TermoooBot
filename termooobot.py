@@ -122,7 +122,7 @@ class TermoooBot:
         self.driver.get("https://term.ooo")
         assert "Termo" in self.driver.title
         time.sleep(1)
-        help_modal = self.driver.find_element_by_id('helpclose')
+        help_modal = self.driver.find_element_by_id('help')
         help_modal.click()
         time.sleep(2)
         
