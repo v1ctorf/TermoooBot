@@ -5,5 +5,6 @@ sys.path.append("..")
 from termooobot import TermoooBot
 
 player = TermoooBot()
-# player.play()
-player.social.tweet('testing Tweepy!! Hey, thanks @chouinardjc')
+player.play()
+status = '#TermoooBot ' + player.today_stats
+player.social.tweet(status)
