@@ -6,6 +6,7 @@ Requirements:
 ----------
 + `pip install Unidecode`
 + [Selenium for Python](https://selenium-python.readthedocs.io/)
++ `pip install tweepy`
 
 Road Map:
 -------

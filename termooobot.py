@@ -1,4 +1,4 @@
-import random, sys, time, yaml, pyperclip, requests
+import random, sys, time, yaml, pyperclip, requests, tweepy
 
 sys.path.append("..")
 
@@ -53,44 +53,33 @@ class Guess:
 
 class SocialMedia:    
     def __init__(self):
-        self.bearer = None
-        self.header = None
-        self.api_base_url = "https://api.twitter.com/2"
-        self.set_bearer_token()
-        self.set_header()
-    
-    
-    def set_bearer_token(self):
+        self.auth = None        
+        self.api = None
+        self.set_auth()
+        self.set_api()
+        
+        
+    def set_auth(self):
         with open('config.yml') as f:    
             config_vars = yaml.safe_load(f)
-        
-        self.bearer = config_vars['bearer_token']        
-        
-
-    def set_header(self):        
-        self.header = {'Authorization': f'Bearer {self.bearer}'}
-        
             
-    def request_tweet(self, tweet_id):            
-        uri = f'{self.api_base_url}/tweets/{tweet_id}' # a specific tweet                
-        response = requests.get(uri, headers = self.header)
+        api_key = config_vars['api_key']
+        api_secrets = config_vars['api_key_secret']
+        access_token = config_vars['access_token']
+        access_secret = config_vars['access_token_secret']
         
-        print(f'Status Code: {response.status_code}')    
-        response_json = response.json() 
+        self.auth = tweepy.OAuthHandler(api_key, api_secrets)
+        self.auth.set_access_token(access_token, access_secret) 
         
-        print(response_json)
-       
+    
+    def set_api(self):        
+        self.api = tweepy.API(self.auth)
         
-    def tweet(self, text):
-        uri = f'{self.api_base_url}/tweets'
-        response = requests.post(uri, headers=self.header, data={'text':text})
-        response.raise_for_status() 
+    
+    def tweet(self, status):
+        # print('#TermoooBot ' + player.today_stats)        
+        self.api.update_status(status=status)
         
-        print(f'Status Code: {response.status_code}')    
-        response_json = response.json() 
-        
-        print(response_json)
-   
         
         
 class TermoooBot:
