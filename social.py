@@ -9,7 +9,7 @@ class SocialMedia:
         
         
     def set_auth(self):
-        with open('config.yml') as f:    
+        with open('./config.yml') as f:    
             config_vars = yaml.safe_load(f)
             
         api_key = config_vars['api_key']
