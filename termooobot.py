@@ -76,9 +76,8 @@ class SocialMedia:
         self.api = tweepy.API(self.auth)
         
     
-    def tweet(self, status):
-        # print('#TermoooBot ' + player.today_stats)        
-        self.api.update_status(status=status)
+    def tweet(self, status):            
+        self.api.update_status(status=status, card_uri='tombstone://card')
         
         
         
