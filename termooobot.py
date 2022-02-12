@@ -76,8 +76,9 @@ class SocialMedia:
         self.api = tweepy.API(self.auth)
         
     
-    def tweet(self, status):            
-        self.api.update_status(status=status, card_uri='tombstone://card')
+    def tweet(self, status):    
+        tweet = self.api.update_status(status=status, card_uri='tombstone://card')  
+        print(f'Tweeted about it @ {tweet.created_at}')
         
         
         
@@ -267,6 +268,7 @@ class TermoooBot:
                    
             if self.count_right_letters() == 5:        
                 print('\nThe word must be ' + guess.word.content.upper())   
+                self.set_today_stats()
                 # TODO Record today date on last_mentioned_on
                 break
             else:
@@ -275,5 +277,8 @@ class TermoooBot:
             if self.count_right_letters() < 5:
                 print(f'The word could not be guessed before {self.MAX_ATTEMPTS}')
                 
-        self.set_today_stats()
         self.close_page()
+        
+        if self.today_stats != None:
+            status = '#TermoooBot ' + self.today_stats + "\n\npowered by https://github.com/v1ctorf/TermoooBot"
+            self.social.tweet(status)

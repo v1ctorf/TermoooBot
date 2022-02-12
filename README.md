@@ -11,7 +11,8 @@ Requirements:
 
 Road Map:
 -------
-+ Use the [official words data base](https://github.com/fserb/pt-br/blob/master/palavras)
++ Mind last_mentioned only if it's older than today
 + Update history (`last_mentioned_on` column on CSV file)
++ Use the [official words data base](https://github.com/fserb/pt-br/blob/master/palavras)
 + Make a simulator considering a significant amount of unique guesses
 + Implement a smarter guessing strategy
