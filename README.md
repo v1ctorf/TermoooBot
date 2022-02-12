@@ -4,9 +4,8 @@ Simple program to solve [Term.ooo](https://newsbeezer.com/portugaleng/wordle-bec
 
 Requirements: 
 ----------
-+ Install `pip install Unidecode`
-+ Install [Selenium for Python](https://selenium-python.readthedocs.io/)
-+ Install `pip install tweepy`
++ `pip install unidecode pyyaml pyperclip tweepy`
++ [Selenium for Python](https://selenium-python.readthedocs.io/)
 + Create a `config.yml` following `config.yml.example`
 + Set `config.yml` with your [Twitter App Credentials](https://www.jcchouinard.com/twitter-api-credentials/)
 
