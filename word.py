@@ -19,8 +19,22 @@ class Word:
             self.part_of_speech = part_of_speech   
             
         self.meanings = meanings  
+       
         
+    def update(self, **params):
+        print('\n\nAntes:')
+        print(self.__dict__)
+        params_list = list(self.__dict__.keys())
         
+        update_params = {}
+        
+        for i in params_list:
+            update_params[i] = params[i] if i in params else self.__dict__[i]            
+        
+        print('\n\nDepois:')
+        print(update_params)
+        
+
 
 class WordBase:
     def __init__(self):
@@ -41,4 +55,7 @@ class WordBase:
             word = Word(content, last_mentioned_on, google_results, part_of_speech, meanings)            
             self.word_base.append(word)                  
             
-        file.close()         
+        file.close() 
+
+    
+        

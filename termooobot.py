@@ -200,7 +200,7 @@ class TermoooBot:
             if self.count_right_letters() == 5:        
                 print('\nThe word must be ' + guess.word.content.upper())   
                 self.set_today_stats()
-                # TODO Record today date on last_mentioned_on
+                guess.word.update(last_mentioned_on=datetime.now())                
                 break
             else:
                 self.show_notes()
