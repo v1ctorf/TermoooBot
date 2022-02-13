@@ -35,7 +35,7 @@ class TermoooBot:
     def __init__(self):
         self.created_at = datetime.now()
         self.MAX_ATTEMPTS = 6        
-        self.word_base = WordBase().word_base
+        self.word_base = WordBase()
         self.word_scope = []
         self.right_letters = []
         self.wrong_letters = ''
@@ -47,7 +47,7 @@ class TermoooBot:
         self.social = SocialMedia()
                    
         self.set_word_scope()
-        self.set_right_letters()                
+        self.set_right_letters()          
     
     
     def set_driver(self):
@@ -77,7 +77,9 @@ class TermoooBot:
 
 
     def set_word_scope(self):
-        scope = [w for w in self.word_base if w.part_of_speech != None]    
+        word_list = self.word_base.get()
+        
+        scope = [w for w in word_list if w.part_of_speech != None]    
         self.word_scope = [w for w in scope if 'substantivo' in w.part_of_speech or 'adjetivo' in w.part_of_speech or 'verbo' in w.part_of_speech]
         self.word_scope = [w for w in self.word_scope if w.last_mentioned_on == None]    
         # todo mind last_mentioned only if it's older than today
@@ -199,8 +201,8 @@ class TermoooBot:
                    
             if self.count_right_letters() == 5:        
                 print('\nThe word must be ' + guess.word.content.upper())   
-                self.set_today_stats()
-                guess.word.update(last_mentioned_on=datetime.now())                
+                self.set_today_stats()                
+                self.word_base.mark_as_mentioned(guess.word)
                 break
             else:
                 self.show_notes()

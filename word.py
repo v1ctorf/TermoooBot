@@ -1,4 +1,8 @@
 from datetime import datetime
+from tempfile import NamedTemporaryFile
+
+import shutil
+import csv
 
 class Word:
     def __init__(self, content, last_mentioned_on, google_results, part_of_speech, meanings):
@@ -20,26 +24,13 @@ class Word:
             
         self.meanings = meanings  
        
-        
-    def update(self, **params):
-        print('\n\nAntes:')
-        print(self.__dict__)
-        params_list = list(self.__dict__.keys())
-        
-        update_params = {}
-        
-        for i in params_list:
-            update_params[i] = params[i] if i in params else self.__dict__[i]            
-        
-        print('\n\nDepois:')
-        print(update_params)
-        
 
 
 class WordBase:
-    def __init__(self):
+    def __init__(self):    
         self.word_base = []
-        self.load()
+        self.load()        
+        
         
     def load(self):
         file = open("classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
@@ -56,6 +47,17 @@ class WordBase:
             self.word_base.append(word)                  
             
         file.close() 
+        
+        
+    def get(self):
+        return self.word_base        
+        
+        
+    def mark_as_mentioned(self, word: Word):
+        print('\nupdating from WordBase.........')
+        print(word)
+        print(word.content)
+        
 
     
         
