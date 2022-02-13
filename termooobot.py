@@ -30,6 +30,29 @@ class Word:
         self.meanings = meanings        
         
         
+
+class WordBase:
+    def __init__(self):
+        self.word_base = []
+        self.load()
+        
+    def load(self):
+        file = open("classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
+        lines = file.readlines()[1:]            
+        
+        for i in lines:    
+            line = i.split(';')   
+            content = line[0].strip()
+            last_mentioned_on =  line[1].replace('\n','').strip()
+            google_results = None        
+            part_of_speech = line[2].strip()
+            meanings = line[3].replace('\n','').strip()            
+            word = Word(content, last_mentioned_on, google_results, part_of_speech, meanings)            
+            self.word_base.append(word)                  
+            
+        file.close()         
+        
+        
         
 class Guess:
     def __init__(self, word: Word):
@@ -56,7 +79,7 @@ class TermoooBot:
     def __init__(self):
         self.created_at = datetime.now()
         self.MAX_ATTEMPTS = 6        
-        self.word_base = []
+        self.word_base = WordBase().word_base
         self.word_scope = []
         self.right_letters = []
         self.wrong_letters = ''
@@ -66,8 +89,7 @@ class TermoooBot:
         self.driver = None    
         self.today_stats = None        
         self.social = SocialMedia()
-        
-        self.set_word_base()        
+                   
         self.set_word_scope()
         self.set_right_letters()                
     
@@ -96,23 +118,6 @@ class TermoooBot:
         
     def count_right_letters(self):
         return len(list(filter(None, self.right_letters)))
-       
-        
-    def set_word_base(self):
-        file = open("classified_five_letter_words_pt-br.csv",'r', encoding="utf8")    
-        lines = file.readlines()[1:]            
-        
-        for i in lines:    
-            line = i.split(';')   
-            content = line[0].strip()
-            last_mentioned_on =  line[1].replace('\n','').strip()
-            google_results = None        
-            part_of_speech = line[2].strip()
-            meanings = line[3].replace('\n','').strip()            
-            word = Word(content, last_mentioned_on, google_results, part_of_speech, meanings)            
-            self.word_base.append(word)                  
-            
-        file.close() 
 
 
     def set_word_scope(self):
